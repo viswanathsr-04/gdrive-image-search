@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Search</title>
+  </head>
+  <body>
+    <h1>Select a Folder</h1>
+    <form method="POST" action="{{ url_for('select_folder') }}">
+      <ul>
+        {% for folder in folders %}
+        <li>
+          <button type="submit" name="folder_id" value="{{ folder['id'] }}">
+            {{ folder['title'] }}
+          </button>
+        </li>
+        {% endfor %}
+      </ul>
+    </form>
+    <form method="POST" action="{{ url_for('process_folder') }}">
+      <button
+        type="submit"
+        name="folder_id"
+        value="{{ request.args.get('folder_id', 'root') }}"
+      >
+        Process Selected Folder
+      </button>
+    </form>
+    <h2>Images in Folder</h2>
+    <ul>
+      {% for image in images %}
+      <li>{{ image['title'] }}</li>
+      {% endfor %}
+    </ul>
+    <hr />
+    <h2>Search for an Image</h2>
+    <form method="POST" action="{{ url_for('search_image') }}">
+      <input type="text" name="query" placeholder="Enter your query" />
+      <button type="submit">Search</button>
+    </form>
+    {% if image_path %}
+    <h2>Most Relevant Image:</h2>
+    <img
+      src="{{ url_for('static', filename=image_path) }}"
+      alt="Relevant Image"
+    />
+    {% endif %}
+  </body>
+</html>
